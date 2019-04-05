@@ -8,6 +8,17 @@
 
 PROMPT_MEAN_TMUX=${PROMPT_MEAN_TMUX-"t"}
 
+MEAN_ARROW_ONE_COLOR=${MEAN_ARROW_ONE_COLOR-"12"}
+MEAN_ARROW_TWO_COLOR=${MEAN_ARROW_TWO_COLOR-"5"}
+MEAN_ARROW_THREE_COLOR=${MEAN_ARROW_THREE_COLOR-"10"}
+MEAN_ARROW_ERR_COLOR=${MEAN_ARROW_ERR_COLOR-"red"}
+MEAN_TMUX_COLOR=${MEAN_TMUX_COLOR-"11"}
+MEAN_PATH_COLOR=${MEAN_PATH_COLOR-"blue"}
+MEAN_VCS_BRANCH_COLOR=${MEAN_VCS_BRANCH_COLOR-"2"}
+MEAN_VCS_DIRTY_COLOR=${MEAN_VCS_DIRTY_COLOR-"5"}
+MEAN_LAMBDA_COLOR=${MEAN_LAMBDA_COLOR-"12"}
+MEAN_HOST_COLOR=${MEAN_HOST_COLOR-"11"}
+
 # turns seconds into human readable time, 165392 => 1d 21h 56m 32s
 prompt_mean_human_time() {
     local tmp=$1
@@ -109,7 +120,8 @@ prompt_mean_precmd() {
 
     vcsinfo="$(git symbolic-ref --short HEAD 2>/dev/null)"
     if [[ !  -z  $vcsinfo  ]] then
-        vcsinfo="%F{2}$vcsinfo%F{5}`prompt_mean_git_dirty` "
+        #vcsinfo="%F{$MEAN_VCS_BRANCH_COLOR}$vcsinfo%F{$MEAN_VCS_DIRTY_COLOR}`prompt_mean_git_dirty` "
+       vcsinfo="%F{$MEAN_VCS_BRANCH_COLOR}$vcsinfo "
     else
         vcsinfo=" "
     fi
@@ -129,8 +141,8 @@ prompt_mean_precmd() {
         ;;
     esac
 
-    PROMPT="$prompt_mean_jobs%F{11}$prompt_mean_tmux `prompt_mean_cmd_exec_time`%f%F{blue}`prompt_short_pwd` %(?.%F{12}.%B%F{red})❯%(?.%F{5}.%B%F{red})❯%(?.%F{13}.%B%F{red})❯%f%b "
-    RPROMPT="$vcsinfo%F{12}λ$prompt_mean_host%f"
+    PROMPT="$prompt_mean_jobs%F{$MEAN_TMUX_COLOR}$prompt_mean_tmux `prompt_mean_cmd_exec_time`%f%F{$MEAN_PATH_COLOR}`prompt_short_pwd` %(?.%F{$MEAN_ARROW_ONE_COLOR}.%B%F{$MEAN_ARROW_ERR_COLOR})❯%(?.%F{$MEAN_ARROW_TWO_COLOR}.%B%F{$MEAN_ARROW_ERR_COLOR})❯%(?.%F{$MEAN_ARROW_THREE_COLOR}.%B%F{$MEAN_ARROW_ERR_COLOR})❯%f%b "
+    RPROMPT="$vcsinfo%F{$MEAN_LAMBDA_COLOR}λ$prompt_mean_host%f"
 
     unset cmd_timestamp # reset value since `preexec` isn't always triggered
 }
